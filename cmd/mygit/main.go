@@ -8,6 +8,8 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
+	"strings"
 )
 
 func main() {
@@ -111,6 +113,23 @@ func main() {
 		}
 
 		fmt.Print(hash)
+
+	case "ls-tree":
+		fileNames := []string{}
+		files, err := os.ReadDir(".")
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unknown error %s\n", err)
+			os.Exit(1)
+		}
+
+		for _, file := range files {
+			if file.Name() != ".git" {
+				fileNames = append(fileNames, file.Name())
+			}
+		}
+
+		sort.Strings(fileNames)
+		fmt.Println(strings.Join(fileNames, "\n"))
 
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown command %s\n", command)
