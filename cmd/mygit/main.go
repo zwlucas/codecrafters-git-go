@@ -587,7 +587,7 @@ func applyDelta(referenceHash string, delta []byte) (targetData []byte, err erro
 	return targetData, nil
 }
 
-func unpack(directory string, reader io.Reader) (err error) {
+func unpack(reader io.Reader) (err error) {
 	packData, err := io.ReadAll(reader)
 	if err != nil {
 		return err
@@ -705,7 +705,7 @@ func clone_repo(remoteUrl string, directory string) (response string, err error)
 	init_repo(false)
 
 	read_pack(packResponse.Body)
-	if err = unpack(directory, packResponse.Body); err != nil {
+	if err = unpack(packResponse.Body); err != nil {
 		return "", err
 	}
 	if err = make_branch(refName, headHash); err != nil {
